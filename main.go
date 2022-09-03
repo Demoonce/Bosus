@@ -1,11 +1,13 @@
 package main
 
 import (
-	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
 	"os"
 	"telega/cities"
+	"telega/jokes"
 	"telega/utils"
+
+	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func processApp() {
@@ -28,10 +30,13 @@ func processApp() {
 	cities.BotName = utils.Api.Self.UserName
 
 	cities.InitCities()
+	jokes.InitJokes()
 	for update := range updates {
 		message := update.Message
-		cities.RunCities(message)
-
+		if message != nil {
+			cities.RunCities(message)
+			jokes.RunJokes(message)
+		}
 	}
 }
 func main() {
