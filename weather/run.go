@@ -14,11 +14,13 @@ func RunWeather(message *tg.Message) {
 			city := strings.Split(commands, " ")[0]
 			if city_data := GetCities(city); city_data != nil {
 				curr_weather := GetWeatherData(city_data.Lat, city_data.Lon)
-				reply := tg.NewMessage(message.Chat.ID, fmt.Sprintf("Город: %s\nТемпература: %.0fºC\nОщущается как: %.0fºC\nАтмосферное давление(на уровне моря): %.0f мм.рт.ст", utils.Capitalize(city), curr_weather.Main.Temp, curr_weather.Main.Feels_like, curr_weather.Main.Pressure))
+				reply := tg.NewMessage(message.Chat.ID, fmt.Sprintf("Город: %s\nТемпература: %.0fºC\nОщущается как: %.0fºC\nАтмосферное давление(на уровне моря): %.0f мм.рт.ст", utils.Capitalize(city), curr_weather.Main.Temp, curr_weather.Main.Feels_like, curr_weather.Main.Pressure/1.3333))
 				utils.Api.Send(reply)
 			} else {
 				utils.Api.Send(tg.NewMessage(message.Chat.ID, "Не знаю такого города"))
 			}
+		} else {
+			utils.Api.Send(tg.NewMessage(message.Chat.ID, "Укажите город параметром команды"))
 		}
 	}
 }

@@ -27,3 +27,14 @@ func Capitalize(str string) string {
 func TrimLower(str string) string {
 	return strings.TrimSpace(strings.ToLower(str))
 }
+
+func Log(msg string, err error) {
+	if err != nil {
+		Logger.Println(msg)
+	}
+}
+func Fatal(msg string, err error) {
+	if err != nil {
+		Logger.Fatalln(msg)
+	}
+}

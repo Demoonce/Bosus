@@ -8,6 +8,7 @@ import (
 	"telega/jokes"
 	"telega/news"
 	"telega/utils"
+	"telega/weather"
 
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
@@ -48,6 +49,7 @@ func processApp() {
 			cities.RunCities(message)
 			jokes.RunJokes(message)
 			news.RunNews(message)
+			weather.RunWeather(message)
 		}
 	}
 }
