@@ -8,7 +8,7 @@ import (
 )
 
 func InitJokes() {
-	if _, err := os.Stat("jokes.gob"); err == nil {
+	if _, err := os.Stat("jokes.gob"); err != nil {
 		ParseJokes()
 		WriteJokes()
 	} else {
