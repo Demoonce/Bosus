@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 	"telega/cities"
 	"telega/jokes"
@@ -33,6 +34,10 @@ func processApp() {
 		log.Fatalln("Can't start bot api", err)
 	}
 
+	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
+		w.Write([]byte("Bo$$ start"))
+	})
+	go http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 	u := tg.NewUpdate(-1)
 	u.Timeout = 60
 	updates := utils.Api.ListenForWebhook("/" + token)
