@@ -8,6 +8,7 @@ import (
 
 func InitNews() {
 	News = GetNews()
+	PanoramaNews = GetPanoramaNews()
 }
 
 func RunNews(message *tg.Message) {
@@ -18,7 +19,7 @@ func RunNews(message *tg.Message) {
 			utils.Logger.Println("NEWS:", err)
 		}
 	} else if message.Command() == "truenews" {
-		msg := tg.NewMessage(message.Chat.ID, strings.Join(PanoramaNews, "\n\n"))
+		msg := tg.NewMessage(message.Chat.ID, strings.Join(PanoramaNews, "\n"))
 		_, err := utils.Api.Send(msg)
 		if err != nil {
 			utils.Logger.Println("PANORAMA NEWS:", err)

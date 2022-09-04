@@ -41,6 +41,7 @@ func processApp() {
 	u := tg.NewUpdate(-1)
 	u.Timeout = 60
 	updates := utils.Api.ListenForWebhook("/" + token)
+	// updates := utils.Api.GetUpdatesChan(u)
 	cities.BotName = utils.Api.Self.UserName
 
 	cities.InitCities()

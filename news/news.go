@@ -18,7 +18,7 @@ func GetNews() []string {
 		utils.Logger.Fatalln(err)
 	}
 	document.Find("span.card-mini__title").Each(func(i int, s *goquery.Selection) {
-		if i < 10 {
+		if i < 5 {
 			results = append(results, s.Text())
 		}
 
