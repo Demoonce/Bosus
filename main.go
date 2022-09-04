@@ -33,7 +33,7 @@ func processApp() {
 	if err != nil {
 		log.Fatalln("Can't start bot api", err)
 	}
-
+	utils.Logger.SetOutput(os.Stdout)
 	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte("Bo$$ start"))
 	})
