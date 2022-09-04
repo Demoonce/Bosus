@@ -14,13 +14,12 @@ import (
 )
 
 func processApp() {
-	token := flag.String("token", "", "Bot token")
-	flag.Parse()
-	if *token == "" {
-		os.Exit(1)
+	token := os.Getenv("TOKEN")
+	if token == "" {
+		log.Fatalln("Unable to get token")
 	}
 	var err error
-	utils.Api, err = tg.NewBotAPI(*token)
+	utils.Api, err = tg.NewBotAPI(token)
 	if err != nil {
 		utils.Logger.Fatalln(err)
 	}
@@ -37,7 +36,7 @@ func processApp() {
 
 	u := tg.NewUpdate(-1)
 	u.Timeout = 60
-	updates := utils.Api.ListenForWebhook("/" + *token)
+	updates := utils.Api.ListenForWebhook("/" + token)
 	cities.BotName = utils.Api.Self.UserName
 
 	cities.InitCities()
