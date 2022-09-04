@@ -1,9 +1,10 @@
 package utils
 
 import (
-	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
 	"strings"
+
+	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func ReplyTo(message *tg.Message, text string) {
