@@ -17,5 +17,11 @@ func RunNews(message *tg.Message) {
 		if err != nil {
 			utils.Logger.Println("NEWS:", err)
 		}
+	} else if message.Command() == "truenews" {
+		msg := tg.NewMessage(message.Chat.ID, strings.Join(PanoramaNews, "\n\n"))
+		_, err := utils.Api.Send(msg)
+		if err != nil {
+			utils.Logger.Println("PANORAMA NEWS:", err)
+		}
 	}
 }

@@ -1,5 +1,6 @@
 package news
 
 var (
-	News []string
+	News         []string
+	PanoramaNews []string
 )
