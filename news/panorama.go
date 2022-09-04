@@ -19,7 +19,7 @@ func GetPanoramaNews() []string {
 		utils.Logger.Println(err)
 		return nil
 	}
-	document.Find("div.font-bold").Each(func(i int, s *goquery.Selection) {
+	document.Find("div.pt-2.text-xl").Each(func(i int, s *goquery.Selection) {
 		news = append(news, s.Text())
 	})
 	return news
