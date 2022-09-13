@@ -17,23 +17,12 @@ func InitJokes() {
 }
 
 func RunJokes(message *tg.Message) {
-	if message.Command() == "joke" {
+	switch message.Command() {
+	case "joke":
 		SendJoke(message.Chat.ID)
-		return
+	case "parse":
+		ParsingMutex.Lock()
+		ParseJokes()
+		ParsingMutex.Unlock()
 	}
-	// if !JokesStarted {
-	// 	go func() {
-	// 		SendJoke(message.Chat.ID)
-	// 		jokes_ticker := time.NewTicker(time.Minute * 1).C
-	// 		for {
-	// 			select {
-	// 			case <-jokes_ticker:
-	// 				SendJoke(message.Chat.ID)
-	// 			default:
-	// 				time.Sleep(time.Minute * 2)
-	// 			}
-	// 		}
-	// 	}()
-	// 	JokesStarted = true
-	// }
 }

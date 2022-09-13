@@ -6,11 +6,12 @@ import (
 )
 
 func InitCities() {
-	Sessions = append(Sessions, &CitiesSession{ //the session of the bot itself
+	Sessions = append(Sessions, &CitiesSession{ // the session of the bot itself
 		Username:     BotName,
 		CalledCities: make([]City, 0),
 	})
 }
+
 func RunCities(message *tg.Message) {
 	if message.IsCommand() {
 		switch com := message.Command(); com {
@@ -26,7 +27,7 @@ func RunCities(message *tg.Message) {
 			RemoveSession(player)
 			utils.ReplyTo(message, "Вы проиграли")
 		case "help":
-			utils.ReplyTo(message, "/help - вывести эту подсказку\n/start - начать игру\n/stop - закончить игру")
+			utils.ReplyTo(message, "help - помощь\nstart - начать сессию в города\nstop - закончить сессию в города\njoke - случайный анекдот\nnews - новости\nweather 'город' - показать погоду\n")
 
 		case "sessions":
 			for _, a := range Sessions {
