@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+
 	"telega/cities"
 	"telega/jokes"
 	"telega/news"
@@ -13,35 +14,34 @@ import (
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func processApp() {
-	token := os.Getenv("TOKEN")
-	if token == "" {
-		log.Fatalln("Unable to get token")
+func initEnv() {
+	utils.Token = os.Getenv("TOKEN")
+	if utils.Token == "" {
+		log.Fatalln("Unable to get telegram bot token")
+		return
 	}
+	weather.API_KEY = os.Getenv("API_KEY")
+	if weather.API_KEY == "" {
+		log.Fatalln("Unable to get api key for open weather")
+	}
+}
+
+func processApp() {
 	var err error
-	utils.Api, err = tg.NewBotAPI(token)
+
+	utils.Api, err = tg.NewBotAPI(utils.Token)
 	if err != nil {
 		utils.Logger.Fatalln(err)
 	}
 
-	file, err := os.Create("log.txt")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer file.Close()
-	utils.Logger = log.New(file, "BOT: ", log.Flags())
-	if err != nil {
-		log.Fatalln("Can't start bot api", err)
-	}
-	utils.Logger.SetOutput(os.Stdout)
 	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte("Bo$$ start"))
 	})
 	go http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 	u := tg.NewUpdate(-1)
 	u.Timeout = 60
-	updates := utils.Api.ListenForWebhook("/" + token)
-	// updates := utils.Api.GetUpdatesChan(u)
+	// updates := utils.Api.ListenForWebhook("/" + utils.Token)
+	updates := utils.Api.GetUpdatesChan(u)
 	cities.BotName = utils.Api.Self.UserName
 
 	cities.InitCities()
@@ -57,6 +57,8 @@ func processApp() {
 		}
 	}
 }
+
 func main() {
+	initEnv()
 	processApp()
 }

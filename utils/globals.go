@@ -1,11 +1,14 @@
 package utils
 
 import (
-	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
+	"os"
+
+	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 var (
 	Api    *tg.BotAPI
-	Logger *log.Logger
+	Logger *log.Logger = log.New(os.Stdout, "BOT: ", log.Flags())
+	Token  string
 )

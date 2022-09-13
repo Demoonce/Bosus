@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
 	"telega/utils"
 )
 
@@ -21,7 +22,7 @@ type City struct {
 }
 
 func GetCities(query string) *City {
-	var resp, err = http.Get(fmt.Sprintf("http://api.openweathermap.org/geo/1.0/direct?q=%s&limit=5&appid=%s", query, API_KEY))
+	resp, err := http.Get(fmt.Sprintf("http://api.openweathermap.org/geo/1.0/direct?q=%s&limit=5&appid=%s", query, API_KEY))
 	if err != nil {
 		panic("Can't get data from API")
 	}
@@ -33,6 +34,9 @@ func GetCities(query string) *City {
 
 	if err := json.Unmarshal(data, &cities); err != nil {
 		utils.Logger.Fatalln(err)
+	}
+	for a := 0; a < len(cities); a++ {
+		cities[a].Country = CountryCodes[cities[a].Country]
 	}
 	if len(cities) > 0 {
 		return &cities[0]

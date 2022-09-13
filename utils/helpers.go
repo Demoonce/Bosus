@@ -19,6 +19,7 @@ func ReplyTo(message *tg.Message, text string) {
 // Makes the first letter of the word uppercase and others lowercase
 func Capitalize(str string) string {
 	if len(str) > 1 {
+		str := strings.ToLower(str)
 		return strings.Title(str)
 	} else {
 		return str
@@ -34,6 +35,7 @@ func Log(msg string, err error) {
 		Logger.Println(msg)
 	}
 }
+
 func Fatal(msg string, err error) {
 	if err != nil {
 		Logger.Fatalln(msg)
