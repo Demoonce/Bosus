@@ -52,8 +52,8 @@ func processApp() {
 	go http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 	u := tg.NewUpdate(-1)
 	u.Timeout = 60
-	// updates := utils.Api.ListenForWebhook("/" + utils.Token)
-	updates := utils.Api.GetUpdatesChan(u)
+	updates := utils.Api.ListenForWebhook("/" + utils.Token)
+	// updates := utils.Api.GetUpdatesChan(u)
 	cities.BotName = utils.Api.Self.UserName
 
 	cities.InitCities()
