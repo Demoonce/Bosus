@@ -23,4 +23,6 @@ var (
 	}
 	Courses        []*Course = make([]*Course, 0)
 	AlreadyStarted           = false
+	Username       string
+	Password       string
 )

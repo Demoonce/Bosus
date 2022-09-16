@@ -1,22 +1,16 @@
 package tasks
 
 import (
-	// "fmt"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
-	"strings"
 	"sync"
 
 	"github.com/PuerkitoBio/goquery"
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"telega/utils"
 )
-
-func getCookieSession(set_cookie string) string {
-	return set_cookie[:strings.IndexRune(set_cookie, rune(';'))]
-}
 
 // Authorizes glazov gov site with the given username and password. Returns cookie of moodle id/session
 func authorize(username string, password string) {
@@ -40,7 +34,7 @@ func authorize(username string, password string) {
 
 // Gets the main page of the glazov gov site
 func InitTasks() *goquery.Document {
-	authorize("жуйков павел", "zheikovpavel2")
+	authorize(Username, Password)
 	req, err := http.NewRequest("GET", "http://is.glazov-gov.ru/my", nil)
 	if err != nil {
 		log.Fatal(err)

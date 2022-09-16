@@ -27,6 +27,15 @@ func initEnv() {
 	if weather.API_KEY == "" {
 		log.Fatalln("Unable to get api key for open weather")
 	}
+
+	tasks.Username = os.Getenv("USERNAME")
+	if tasks.Username == "" {
+		log.Fatalln("Unable to get username for distant website")
+	}
+	tasks.Password = os.Getenv("PASSWORD")
+	if tasks.Password == "" {
+		log.Fatalln("Unable to get password for distant website")
+	}
 }
 
 func processApp() {
