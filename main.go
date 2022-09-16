@@ -4,10 +4,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 
 	"telega/cities"
 	"telega/jokes"
 	"telega/news"
+	"telega/tasks"
+	_ "telega/tasks"
 	"telega/utils"
 	"telega/weather"
 
@@ -28,7 +31,7 @@ func initEnv() {
 
 func processApp() {
 	var err error
-
+	var tasks_wg sync.WaitGroup
 	utils.Api, err = tg.NewBotAPI(utils.Token)
 	if err != nil {
 		utils.Logger.Fatalln(err)
@@ -40,13 +43,14 @@ func processApp() {
 	go http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 	u := tg.NewUpdate(-1)
 	u.Timeout = 60
-	updates := utils.Api.ListenForWebhook("/" + utils.Token)
-	// updates := utils.Api.GetUpdatesChan(u)
+	// updates := utils.Api.ListenForWebhook("/" + utils.Token)
+	updates := utils.Api.GetUpdatesChan(u)
 	cities.BotName = utils.Api.Self.UserName
 
 	cities.InitCities()
 	jokes.InitJokes()
 	news.InitNews()
+	tasks.CourseDocument = tasks.InitTasks()
 	for update := range updates {
 		message := update.Message
 		if message != nil {
@@ -54,6 +58,7 @@ func processApp() {
 			jokes.RunJokes(message)
 			news.RunNews(message)
 			weather.RunWeather(message)
+			tasks.RunTasks(message, &tasks_wg)
 		}
 	}
 }
