@@ -7,8 +7,9 @@ import (
 	"math/big"
 	"net/http"
 	"os"
-	"telega/utils"
 	"time"
+
+	"telega/utils"
 
 	"github.com/PuerkitoBio/goquery"
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -37,8 +38,7 @@ func SendJoke(chat_id int64) {
 	utils.Api.Send(msg)
 }
 
-//Parsing functions
-
+// Parsing functions
 func getJokesPage(url string) {
 	resp, err := http.Get(url)
 	if err != nil {

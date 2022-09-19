@@ -5,6 +5,7 @@ import (
 )
 
 var (
-	Chain    = gomarkov.NewChain(1)
+	Order    = 1
+	Chain    = gomarkov.NewChain(Order)
 	Messages []string
 )

@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"sync"
 
 	"telega/cities"
@@ -46,6 +47,7 @@ func initEnv() {
 func processApp() {
 	var err error
 	var tasks_wg sync.WaitGroup
+	signal_chan := make(chan os.Signal)
 	utils.Api, err = tg.NewBotAPI(utils.Token)
 	if err != nil {
 		utils.Logger.Fatalln(err)
@@ -66,6 +68,13 @@ func processApp() {
 	news.InitNews()
 	tasks.CourseDocument = tasks.InitTasks()
 	talk.InitTalk()
+
+	signal.Notify(signal_chan, os.Interrupt)
+	go func(sig_chan chan os.Signal) {
+		<-sig_chan
+		talk.SaveChain()
+		os.Exit(0)
+	}(signal_chan)
 	for update := range updates {
 		message := update.Message
 		if message != nil {
