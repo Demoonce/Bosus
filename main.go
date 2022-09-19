@@ -9,6 +9,7 @@ import (
 	"telega/cities"
 	"telega/jokes"
 	"telega/news"
+	"telega/talk"
 	"telega/tasks"
 	_ "telega/tasks"
 	"telega/utils"
@@ -17,6 +18,10 @@ import (
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
+// TOKEN - bot token
+// API_KEY - api key for open weather
+// USERNAME - username for glazov gov
+// PASSWORD - password for glazov gov
 func initEnv() {
 	utils.Token = os.Getenv("TOKEN")
 	if utils.Token == "" {
@@ -52,14 +57,15 @@ func processApp() {
 	go http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 	u := tg.NewUpdate(-1)
 	u.Timeout = 60
-	updates := utils.Api.ListenForWebhook("/" + utils.Token)
-	// updates := utils.Api.GetUpdatesChan(u)
+	// updates := utils.Api.ListenForWebhook("/" + utils.Token)
+	updates := utils.Api.GetUpdatesChan(u)
 	cities.BotName = utils.Api.Self.UserName
 
 	cities.InitCities()
 	jokes.InitJokes()
 	news.InitNews()
 	tasks.CourseDocument = tasks.InitTasks()
+	talk.InitTalk()
 	for update := range updates {
 		message := update.Message
 		if message != nil {
@@ -68,6 +74,7 @@ func processApp() {
 			news.RunNews(message)
 			weather.RunWeather(message)
 			tasks.RunTasks(message, &tasks_wg)
+			talk.RunTalk(message)
 		}
 	}
 }
