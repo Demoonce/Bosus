@@ -65,12 +65,7 @@ func RunTasks(message *tg.Message, tasks_wg *sync.WaitGroup) {
 			for _, task := range course.Tasks {
 				GetTaskContent(task) // initializes task slices for each course
 			}
-			var message_text string
-			if course.Name == "Человек, природа, мир 11 класс" {
-				message_text = fmt.Sprintf("%s\n\n%s\n%s", course.Name, course.Tasks[len(course.Tasks)-2].Name, course.Tasks[len(course.Tasks)-2].Contents)
-			} else {
-				message_text = fmt.Sprintf("%s\n\n%s\n%s", course.Name, course.Tasks[len(course.Tasks)-1].Name, course.Tasks[len(course.Tasks)-1].Contents)
-			}
+			message_text := fmt.Sprintf("%s\n\n%s\n%s", course.Name, course.Tasks[len(course.Tasks)-1].Name, course.Tasks[len(course.Tasks)-1].Contents)
 			reply := tg.NewMessage(message.Chat.ID, message_text)
 			reply.ParseMode = "HTML"
 			utils.Api.Send(reply)
