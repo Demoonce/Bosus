@@ -25,4 +25,13 @@ var (
 	AlreadyStarted           = false
 	Username       string
 	Password       string
+
+	LinksClient = http.Client{
+		Transport: nil,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+		Jar:     Jar,
+		Timeout: time.Second * 5,
+	}
 )

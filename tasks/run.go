@@ -7,9 +7,10 @@ import (
 	"net/url"
 	"sync"
 
+	"telega/utils"
+
 	"github.com/PuerkitoBio/goquery"
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"telega/utils"
 )
 
 // Authorizes glazov gov site with the given username and password. Returns cookie of moodle id/session
@@ -61,14 +62,22 @@ func RunTasks(message *tg.Message, tasks_wg *sync.WaitGroup) {
 		utils.ReplyTo(message, "Подождите...")
 		GetTasks(CourseDocument, tasks_wg) // initializes course slice
 		tasks_wg.Wait()
+
 		for _, course := range Courses {
 			for _, task := range course.Tasks {
 				GetTaskContent(task) // initializes task slices for each course
 			}
-			message_text := fmt.Sprintf("%s\n\n%s\n%s", course.Name, course.Tasks[len(course.Tasks)-1].Name, course.Tasks[len(course.Tasks)-1].Contents)
+			last_task := course.Tasks[len(course.Tasks)-1]
+			message_text := fmt.Sprintf("%s\n\n%s\n%s", course.Name, last_task.Name, last_task.Contents)
 			reply := tg.NewMessage(message.Chat.ID, message_text)
 			reply.ParseMode = "HTML"
 			utils.Api.Send(reply)
+
+			for _, a := range last_task.Documents {
+				doc := tg.NewDocument(message.Chat.ID, a)
+				utils.Api.Send(doc)
+			}
+
 		}
 		AlreadyStarted = false
 		Courses = make([]*Course, 0)
