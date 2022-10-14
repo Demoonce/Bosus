@@ -22,7 +22,7 @@ type Task struct {
 	Contents  string
 }
 
-// sends request to the specified course, returns links of the last and the prelast tasks. Used internally.
+// sends request to the specified course, returns links of the tasks
 func sendRequest(course *Course, wg *sync.WaitGroup) {
 	defer wg.Done()
 	req, err := http.NewRequest("GET", course.Link, nil)
@@ -56,18 +56,18 @@ func sendRequest(course *Course, wg *sync.WaitGroup) {
 func GetTaskContent(task *Task) {
 	req, err := http.NewRequest("GET", task.Link, nil)
 	if err != nil {
-		utils.Logger.Fatal(err)
+		utils.Logger.Println(err)
 	}
 	req.Header.Add("User-Agent", UserAgent)
 
 	resp, err := Client.Do(req)
 	if err != nil {
-		utils.Logger.Fatalln(err)
+		utils.Logger.Println(err)
 	}
 
 	document, err := goquery.NewDocumentFromResponse(resp)
 	if err != nil {
-		utils.Logger.Fatalln(err)
+		utils.Logger.Println(err)
 	}
 
 	content_block := document.Find("div.single-section").Find("div.content")

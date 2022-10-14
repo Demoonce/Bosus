@@ -15,7 +15,6 @@ type Course struct {
 }
 
 func GetTasks(mainpage *goquery.Document, wg *sync.WaitGroup) {
-	AlreadyStarted = true
 	if mainpage == nil {
 		return
 	}

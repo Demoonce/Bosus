@@ -22,9 +22,9 @@ var (
 		Timeout: time.Second * 20,
 	}
 	Courses        []*Course = make([]*Course, 0)
-	AlreadyStarted           = false
 	Username       string
 	Password       string
+	Authorized     = false
 
 	LinksClient = http.Client{
 		Transport: nil,
