@@ -68,6 +68,7 @@ func RunTasks(message *tg.Message, tasks_wg *sync.WaitGroup) {
 				GetTaskContent(task) // initializes task slices for each course
 			}
 			if len(course.Tasks) == 0 {
+				AlreadyStarted = false
 				return
 			}
 			last_task := course.Tasks[len(course.Tasks)-1]
