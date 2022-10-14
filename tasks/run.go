@@ -67,6 +67,9 @@ func RunTasks(message *tg.Message, tasks_wg *sync.WaitGroup) {
 			for _, task := range course.Tasks {
 				GetTaskContent(task) // initializes task slices for each course
 			}
+			if len(course.Tasks) == 0 {
+				return
+			}
 			last_task := course.Tasks[len(course.Tasks)-1]
 			message_text := fmt.Sprintf("%s\n\n%s\n%s", course.Name, last_task.Name, last_task.Contents)
 			reply := tg.NewMessage(message.Chat.ID, message_text)
