@@ -31,11 +31,15 @@ func authorize(username string, password string) {
 			Unparsed: []string{resp.Header.Get("Set-Cookie")},
 		},
 	})
+	Authorized = true
 }
 
 // Gets the main page of the glazov gov site
 func InitTasks() *goquery.Document {
 	authorize(Username, Password)
+	if !Authorized {
+		return nil
+	}
 	req, err := http.NewRequest("GET", "http://is.glazov-gov.ru/my", nil)
 	if err != nil {
 		log.Println(err)
@@ -59,7 +63,10 @@ func InitTasks() *goquery.Document {
 func RunTasks(message *tg.Message, tasks_wg *sync.WaitGroup) {
 	if message.Command() == "distant" {
 		utils.ReplyTo(message, "Подождите...")
-		GetTasks(CourseDocument, tasks_wg) // initializes course slice
+		if err := GetTasks(CourseDocument, tasks_wg); err != nil {
+			utils.ReplyTo(message, "Ошибка")
+			return
+		}
 		tasks_wg.Wait()
 
 		for _, course := range Courses {

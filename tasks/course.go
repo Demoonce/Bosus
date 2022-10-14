@@ -1,6 +1,7 @@
 package tasks
 
 import (
+	"errors"
 	"sync"
 
 	"telega/utils"
@@ -14,9 +15,9 @@ type Course struct {
 	Tasks []*Task
 }
 
-func GetTasks(mainpage *goquery.Document, wg *sync.WaitGroup) {
+func GetTasks(mainpage *goquery.Document, wg *sync.WaitGroup) error {
 	if mainpage == nil {
-		return
+		return errors.New("Can't get document of the site")
 	}
 	mainpage.Find("div.course_list").Each(func(i int, s *goquery.Selection) {
 		s.Find("a").Each(func(i int, s *goquery.Selection) {
@@ -30,4 +31,5 @@ func GetTasks(mainpage *goquery.Document, wg *sync.WaitGroup) {
 			go sendRequest(&course, wg)
 		})
 	})
+	return nil
 }
