@@ -16,6 +16,9 @@ type Course struct {
 
 func GetTasks(mainpage *goquery.Document, wg *sync.WaitGroup) {
 	AlreadyStarted = true
+	if mainpage == nil {
+		return
+	}
 	mainpage.Find("div.course_list").Each(func(i int, s *goquery.Selection) {
 		s.Find("a").Each(func(i int, s *goquery.Selection) {
 			href, ok := s.Attr("href")

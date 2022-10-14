@@ -19,7 +19,7 @@ var (
 			return nil
 		},
 		Jar:     Jar,
-		Timeout: time.Second * 5,
+		Timeout: time.Second * 20,
 	}
 	Courses        []*Course = make([]*Course, 0)
 	AlreadyStarted           = false
@@ -32,6 +32,6 @@ var (
 			return http.ErrUseLastResponse
 		},
 		Jar:     Jar,
-		Timeout: time.Second * 5,
+		Timeout: time.Second * 20,
 	}
 )

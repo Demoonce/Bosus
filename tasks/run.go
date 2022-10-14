@@ -20,7 +20,7 @@ func authorize(username string, password string) {
 		"password": {password},
 	})
 	if err != nil {
-		log.Fatalln("Can't authorize:", err)
+		return
 	}
 	Client.Jar.SetCookies(&url.URL{
 		Scheme: "http",
