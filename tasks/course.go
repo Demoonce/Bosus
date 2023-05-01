@@ -10,9 +10,9 @@ import (
 )
 
 type Course struct {
-	Name  string
-	Link  string
-	Tasks []*Task
+	Name  string  `json:"course_name"`
+	Link  string  `json:"course_link"`
+	Tasks []*Task `json:"tasks"`
 }
 
 func GetTasks(mainpage *goquery.Document, wg *sync.WaitGroup) error {

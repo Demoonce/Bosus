@@ -1,10 +1,12 @@
 package tasks
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"sync"
 
 	"telega/utils"
@@ -68,11 +70,11 @@ func RunTasks(message *tg.Message, tasks_wg *sync.WaitGroup) {
 			return
 		}
 		tasks_wg.Wait()
-
 		for _, course := range Courses {
 			for _, task := range course.Tasks {
 				GetTaskContent(task) // initializes task slices for each course
 			}
+			Cache("courses.json")
 			if len(course.Tasks) == 0 {
 				Courses = make([]*Course, 0)
 				return
@@ -87,12 +89,23 @@ func RunTasks(message *tg.Message, tasks_wg *sync.WaitGroup) {
 				doc := tg.NewDocument(message.Chat.ID, a)
 				utils.Api.Send(doc)
 			}
-
 		}
+
 		Courses = make([]*Course, 0)
 	}
 }
 
-func Cache(file string) {
-	// TODO
+func Cache(filename string) {
+	file, err := os.Create(filename)
+	if err != nil {
+		utils.Logger.Fatalln(err)
+	}
+	defer file.Close()
+	encoder := json.NewEncoder(file)
+	encoder.SetEscapeHTML(false)
+	encoder.SetIndent("", "	")
+	err = encoder.Encode(Courses)
+	if err != nil {
+		utils.Logger.Fatalln(err)
+	}
 }

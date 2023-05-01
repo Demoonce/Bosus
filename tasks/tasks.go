@@ -16,13 +16,13 @@ import (
 )
 
 type Task struct {
-	Name      string
-	Link      string
-	Documents []tg.FileBytes
-	Contents  string
+	Name      string         `json:"task_name"`
+	Link      string         `json:"task_link"`
+	Documents []tg.FileBytes `json:"-"`
+	Contents  string         `json:"task_contents"`
 }
 
-// sends request to the specified course, returns links of the tasks
+// Sends request to the specified course, returns links of the tasks ((actually assigns directly to the course.Tasks))
 func sendRequest(course *Course, wg *sync.WaitGroup) {
 	defer wg.Done()
 	req, err := http.NewRequest("GET", course.Link, nil)
@@ -53,6 +53,7 @@ func sendRequest(course *Course, wg *sync.WaitGroup) {
 	})
 }
 
+// Overcomplicated function, just don't touch it
 func GetTaskContent(task *Task) {
 	req, err := http.NewRequest("GET", task.Link, nil)
 	if err != nil {
@@ -109,7 +110,7 @@ func GetTaskContent(task *Task) {
 					href = redirect_url.String()
 
 				}
-				task.Contents += "\n" + fmt.Sprintf("<a href='%s'> %s </a>", href, s.Text())
+				task.Contents += "<br>" + fmt.Sprintf("<a href='%s'> %s </a>", href, s.Text())
 			}
 		}
 	})
